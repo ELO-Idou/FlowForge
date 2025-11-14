@@ -1,0 +1,168 @@
+services:
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../docker/Dockerfile.frontend
+    container_name: automation_frontend
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+      - VITE_WS_URL=ws://localhost:8000/ws
+      - VITE_N8N_URL=http://localhost:5678
+    depends_on:
+      - backend
+    networks:
+      - automation_network
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile.backend
+    container_name: automation_backend
+    env_file:
+      - ../backend/.env
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://automation_user:SecurePass123!@postgres:5432/automation_db
+      - REDIS_URL=redis://redis:6379/0
+      - N8N_BASE_URL=http://n8n:5678
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL=gemini-2.0-flash-exp
+      - SECRET_KEY=your-super-secret-key-change-in-production-min-32-chars
+      - JWT_ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5678
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - DATA_DIR=/app/data
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - DEEPSEEK_MODEL=${DEEPSEEK_MODEL}
+    volumes:
+      - ../backend:/app
+      - ../backend/data:/app/data
+      - ../backend/logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      n8n:
+        condition: service_started
+    networks:
+      - automation_network
+    restart: unless-stopped
+
+  n8n:
+    image: n8nio/n8n:1.118.1
+    container_name: automation_n8n
+    env_file:
+      - ../backend/.env
+    ports:
+      - "5678:5678"
+    environment:
+      N8N_HOST: localhost
+      N8N_PORT: 5678
+      N8N_PROTOCOL: http
+      WEBHOOK_URL: http://localhost:5678/
+      N8N_BASIC_AUTH_ACTIVE: 'true'
+      N8N_BASIC_AUTH_USER: ${N8N_BASIC_AUTH_USER}
+      N8N_BASIC_AUTH_PASSWORD: ${N8N_BASIC_AUTH_PASSWORD}
+      N8N_API_KEY: ${N8N_API_KEY}
+      N8N_API_KEY_PREFIX: 'n8n-api-key'
+      DB_TYPE: postgresdb
+      DB_POSTGRESDB_HOST: postgres
+      DB_POSTGRESDB_PORT: 5432
+      DB_POSTGRESDB_DATABASE: n8n_db
+      DB_POSTGRESDB_USER: automation_user
+      DB_POSTGRESDB_PASSWORD: SecurePass123!
+      EXECUTIONS_MODE: queue
+      QUEUE_BULL_REDIS_HOST: redis
+      QUEUE_BULL_REDIS_PORT: 6379
+      QUEUE_BULL_REDIS_PASSWORD: 'RedisPass123!'
+      REDIS_PASSWORD: 'RedisPass123!'
+      EXECUTIONS_DATA_SAVE_ON_SUCCESS: all
+      EXECUTIONS_DATA_SAVE_ON_ERROR: all
+      EXECUTIONS_DATA_SAVE_MANUAL_EXECUTIONS: 'true'
+      GENERIC_TIMEZONE: Europe/Vienna
+      N8N_METRICS: 'true'
+      N8N_METRICS_PREFIX: n8n_
+      N8N_ENCRYPTION_KEY: your-n8n-encryption-key-min-10-chars
+      N8N_DISABLE_TELEMETRY: 'true'
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ../n8n-custom/workflows:/home/node/.n8n/workflows
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - automation_network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: automation_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=automation_user
+      - POSTGRES_PASSWORD=SecurePass123!
+      - POSTGRES_DB=automation_db
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/01-init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U automation_user -d automation_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - automation_network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: automation_redis
+    # Port removed - only accessible within Docker network (backend/n8n)
+    # If you need external access for debugging, use: ports: ["6379:6379"]
+    command: redis-server --appendonly yes --requirepass RedisPass123!
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - automation_network
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: automation_pgadmin
+    ports:
+      - "5050:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@example.com
+      - PGADMIN_DEFAULT_PASSWORD=SecurePass123!
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - automation_network
+    restart: unless-stopped
+
+networks:
+  automation_network:
+    driver: bridge
+
+volumes:
+  n8n_data:
+  postgres_data:
+  redis_data:

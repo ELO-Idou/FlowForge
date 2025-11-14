@@ -1,0 +1,455 @@
+{
+  "name": "Zendesk Auto-Triage and Routing (Zendesk Trigger + Error Wiring)",
+  "nodes": [
+    {
+      "id": "zendesk-trigger",
+      "name": "Zendesk Trigger",
+      "type": "n8n-nodes-base.zendeskTrigger",
+      "typeVersion": 1,
+      "position": [200, 240],
+      "parameters": {
+        "event": "ticket.created"
+      },
+      "credentials": {}
+    },
+    {
+      "id": "normalize",
+      "name": "Normalize Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [520, 240],
+      "parameters": {
+        "jsCode": "const item = $json || {};\nconst id = item.ticket?.id ?? item.id ?? 0;\nconst subject = item.ticket?.subject ?? item.subject ?? '';\nconst requesterEmail = item.requester?.email ?? item.ticket?.requester?.email ?? '';\nconst tags = item.ticket?.tags ?? item.tags ?? [];\nreturn [{ json: { id, subject, requester: { email: requesterEmail }, tags } }];"
+      },
+      "credentials": {}
+    },
+    {
+      "id": "duplicate-search",
+      "name": "Search Duplicate Tickets",
+      "type": "n8n-nodes-base.zendesk",
+      "typeVersion": 1,
+      "position": [840, 240],
+      "parameters": {
+        "operation": "getAll",
+        "resource": "ticket",
+        "returnAll": true,
+        "additionalFields": {
+          "query": "status:open created>=-48h requester:{{ $json.requester.email }}"
+        }
+      },
+      "credentials": {},
+      "continueOnFail": true
+    },
+    {
+      "id": "duplicate-if",
+      "name": "Check Duplicate Count",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1160, 240],
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $items(\"Search Duplicate Tickets\").length }}",
+              "operation": "larger",
+              "value2": 0
+            }
+          ]
+        },
+        "combineOperation": "all",
+        "alwaysOutputData": true
+      },
+      "credentials": {}
+    },
+    {
+      "id": "duplicate-tag",
+      "name": "Add Duplicate Tag",
+      "type": "n8n-nodes-base.zendesk",
+      "typeVersion": 1,
+      "position": [1480, 160],
+      "parameters": {
+        "operation": "update",
+        "resource": "ticket",
+        "ticketId": "={{ $json.id }}",
+        "updateFields": {
+          "additionalTags": "possible-duplicate"
+        }
+      },
+      "credentials": {},
+      "continueOnFail": true
+    },
+    {
+      "id": "duplicate-slack",
+      "name": "Duplicate Slack Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [1800, 160],
+      "parameters": {
+        "resource": "message",
+        "operation": "post",
+        "channel": "#support-intake",
+        "text": "⚠️ Possible duplicate ticket detected\nTicket ID: {{ $json.id }}\nRequester: {{ $json.requester.email }}\nSubject: {{ $json.subject }}"
+      },
+      "credentials": {},
+      "continueOnFail": true
+    },
+    {
+      "id": "refund-if",
+      "name": "Check for Refund/Return",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1480, 320],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.subject.toLowerCase() }}",
+              "operation": "contains",
+              "value2": "refund"
+            },
+            {
+              "value1": "={{ $json.subject.toLowerCase() }}",
+              "operation": "contains",
+              "value2": "return"
+            }
+          ]
+        },
+        "combineOperation": "any",
+        "alwaysOutputData": true
+      },
+      "credentials": {}
+    },
+    {
+      "id": "refund-update",
+      "name": "Apply Refund Routing",
+      "type": "n8n-nodes-base.zendesk",
+      "typeVersion": 1,
+      "position": [1800, 320],
+      "parameters": {
+        "operation": "update",
+        "resource": "ticket",
+        "ticketId": "={{ $json.id }}",
+        "updateFields": {
+          "group": "Billing",
+          "additionalTags": "refund"
+        }
+      },
+      "credentials": {},
+      "continueOnFail": true
+    },
+    {
+      "id": "tech-if",
+      "name": "Check for Technical Issues",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1480, 480],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.subject.toLowerCase() }}",
+              "operation": "contains",
+              "value2": "installation"
+            },
+            {
+              "value1": "={{ $json.subject.toLowerCase() }}",
+              "operation": "contains",
+              "value2": "connectivity"
+            },
+            {
+              "value1": "={{ $json.subject.toLowerCase() }}",
+              "operation": "contains",
+              "value2": "bridge"
+            }
+          ]
+        },
+        "combineOperation": "any",
+        "alwaysOutputData": true
+      },
+      "credentials": {}
+    },
+    {
+      "id": "tech-update",
+      "name": "Apply Tech Routing",
+      "type": "n8n-nodes-base.zendesk",
+      "typeVersion": 1,
+      "position": [1800, 480],
+      "parameters": {
+        "operation": "update",
+        "resource": "ticket",
+        "ticketId": "={{ $json.id }}",
+        "updateFields": {
+          "group": "Tech Support",
+          "additionalTags": "installation"
+        }
+      },
+      "credentials": {},
+      "continueOnFail": true
+    },
+    {
+      "id": "partner-if",
+      "name": "Check for Partner Email",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1480, 640],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.requester.email }}",
+              "operation": "endsWith",
+              "value2": "@retailer-partner.com"
+            }
+          ]
+        },
+        "combineOperation": "all",
+        "alwaysOutputData": true
+      },
+      "credentials": {}
+    },
+    {
+      "id": "partner-update",
+      "name": "Apply Partner Routing",
+      "type": "n8n-nodes-base.zendesk",
+      "typeVersion": 1,
+      "position": [1800, 640],
+      "parameters": {
+        "operation": "update",
+        "resource": "ticket",
+        "ticketId": "={{ $json.id }}",
+        "updateFields": {
+          "group": "Partner Support",
+          "additionalTags": "partner"
+        }
+      },
+      "credentials": {},
+      "continueOnFail": true
+    },
+    {
+      "id": "merge-a",
+      "name": "Merge A",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [2120, 360],
+      "parameters": {
+        "mode": "mergeByPosition"
+      },
+      "credentials": {}
+    },
+    {
+      "id": "merge-b",
+      "name": "Merge B",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [2280, 420],
+      "parameters": {
+        "mode": "mergeByPosition"
+      },
+      "credentials": {}
+    },
+    {
+      "id": "merge",
+      "name": "Merge Routing Results",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [2440, 480],
+      "parameters": {
+        "mode": "mergeByPosition"
+      },
+      "credentials": {}
+    },
+    {
+      "id": "has-error",
+      "name": "Has Error?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2640, 420],
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.error !== undefined }}",
+              "operation": "isTrue"
+            }
+          ]
+        },
+        "combineOperation": "all",
+        "alwaysOutputData": true
+      },
+      "credentials": {}
+    },
+    {
+      "id": "error-http",
+      "name": "Send to Error Webhook",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2840, 420],
+      "parameters": {
+        "url": "REPLACE_WITH_ERROR_WEBHOOK_URL",
+        "method": "POST",
+        "sendBody": true,
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={ {\"origin\": $node[\"Has Error?\"].parameters?.name || \"Unknown\", \"error\": $json.error?.message || $json.error || \"Unknown\", \"id\": $json.id, \"subject\": $json.subject, \"requester_email\": $json.requester?.email, \"originalData\": $json } }"
+      },
+      "credentials": {}
+    },
+    {
+      "id": "build-summary",
+      "name": "Build Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2640, 540],
+      "parameters": {
+        "jsCode": "const j = $json || {};\nconst group = j.group || j.fields?.group || 'Unchanged';\nconst tags = j.tags || j.fields?.tags || [];\nconst requester_email = j.requester?.email || '';\nconst subject = j.subject || '';\nreturn [{ json: { id: j.id, requester_email, subject, group, tags } }];"
+      },
+      "credentials": {}
+    },
+    {
+      "id": "slack-summary",
+      "name": "Slack Summary",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [2840, 540],
+      "parameters": {
+        "resource": "message",
+        "operation": "post",
+        "channel": "#support-intake",
+        "text": "📋 New ticket routed\nTicket ID: {{ $json.id }}\nRequester: {{ $json.requester_email }}\nSubject: {{ $json.subject }}\nGroup: {{ $json.group }}\nTags: {{ $json.tags }}"
+      },
+      "credentials": {},
+      "continueOnFail": true
+    }
+  ],
+  "connections": {
+    "Zendesk Trigger": {
+      "main": [
+        [
+          { "node": "Normalize Input", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Normalize Input": {
+      "main": [
+        [
+          { "node": "Search Duplicate Tickets", "type": "main", "index": 0 },
+          { "node": "Merge A", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Search Duplicate Tickets": {
+      "main": [
+        [
+          { "node": "Check Duplicate Count", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Check Duplicate Count": {
+      "main": [
+        [
+          { "node": "Add Duplicate Tag", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Check for Refund/Return", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Add Duplicate Tag": {
+      "main": [
+        [
+          { "node": "Duplicate Slack Alert", "type": "main", "index": 0 },
+          { "node": "Check for Refund/Return", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Check for Refund/Return": {
+      "main": [
+        [
+          { "node": "Apply Refund Routing", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Check for Technical Issues", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Check for Technical Issues": {
+      "main": [
+        [
+          { "node": "Apply Tech Routing", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Check for Partner Email", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Check for Partner Email": {
+      "main": [
+        [
+          { "node": "Apply Partner Routing", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Apply Refund Routing": {
+      "main": [
+        [
+          { "node": "Merge A", "type": "main", "index": 1 }
+        ]
+      ]
+    },
+    "Apply Tech Routing": {
+      "main": [
+        [
+          { "node": "Merge B", "type": "main", "index": 1 }
+        ]
+      ]
+    },
+    "Apply Partner Routing": {
+      "main": [
+        [
+          { "node": "Merge Routing Results", "type": "main", "index": 1 }
+        ]
+      ]
+    },
+    "Merge A": {
+      "main": [
+        [
+          { "node": "Merge B", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Merge B": {
+      "main": [
+        [
+          { "node": "Merge Routing Results", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Merge Routing Results": {
+      "main": [
+        [
+          { "node": "Has Error?", "type": "main", "index": 0 },
+          { "node": "Build Summary", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Has Error?": {
+      "main": [
+        [
+          { "node": "Send to Error Webhook", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Build Summary": {
+      "main": [
+        [
+          { "node": "Slack Summary", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "executionTimeout": -1
+  }
+}

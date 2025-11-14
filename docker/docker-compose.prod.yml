@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  frontend:
+    extends:
+      file: docker-compose.yml
+      service: frontend
+    environment:
+      - VITE_API_URL=https://api.example.com
+
+  backend:
+    extends:
+      file: docker-compose.yml
+      service: backend
+    environment:
+      - ENVIRONMENT=production
+      - DEBUG=false

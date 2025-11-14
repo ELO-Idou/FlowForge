@@ -1,0 +1,2506 @@
+please be aware i want you to realy act as as high expert SaaS Automation and workflow backend frotend ENgeener and generat the full detailled prompt to us in vs code with all guidens and instruction?  us typescrypt and react, python, docker, ..., " us the colors in the screenshot,  the frontend must show as  Marketing page and dashboard also " with   landing page  with loging  "email password" ,  personalized header,  complet complaiences pages,  signatur " in the Footer Build by "ELhoucine Idousaid"   1 landing page with  a slogann  clear "you choose one"  click register " that register form, than marketig page shows,  "Header well structured  dashboard .create new workflow boutton ....extera",than the core " , detailled instruction , FAQ,  footer,    when we click on the create workflow " we must have a single chatUI just like your interface"   prompte must be  in NLP,  that the backend pars, transform to N8N compatible workflownods with the exact number of steps and parameter, and exacte number off eadges"  "how the chat  must look like "  emhpth  y in the middle " one quetion "  Hi! Let’s turn your idea into an intelligent workflow"  afther entering the prompt  the  the ChatUI daynamicly shows  process steps like it popUp up from watter,  whet it s complet one boutton "open in n8n" , and add credentialwith some instruction, run and monitor "  i am gonna a us "Gemini 2.O flash Apikey for this.   when clicked on enter the ChatUI shows the detailes in plan with complet instruction of the workflow what, how to, learn"🚀 COMPLETE SAAS AUTOMATION PLATFORM - EXPERT-LEVEL IMPLEMENTATION GUIDE
+💼 Project: AI-Powered Workflow Automation Platform (NUKI-Inspired Design)
+
+📋 EXECUTIVE SUMMARY
+Your Role: Senior SaaS Automation & Workflow Engineer
+Tech Stack: TypeScript, React, Python (FastAPI), Docker, PostgreSQL, Redis, N8N
+AI Engine: Google Gemini 2.0 Flash API
+Design Inspiration: NUKI Smart Locks (Premium dark theme with yellow accents)
+
+🎨 DESIGN SYSTEM (From Screenshot)
+typescript// Design Tokens - NUKI Color Scheme
+export const designTokens = {
+  colors: {
+    primary: {
+      yellow: '#F5C842',      // CTA buttons
+      yellowHover: '#E6B831',
+      yellowLight: '#FFF4D6'
+    },
+    neutral: {
+      darkest: '#0A0A0A',     // Background
+      dark: '#1A1A1A',        // Cards
+      gray800: '#2A2A2A',
+      gray700: '#404040',
+      gray500: '#808080',
+      gray300: '#B0B0B0',
+      gray100: '#E0E0E0',
+      white: '#FFFFFF'
+    },
+    accent: {
+      steel: '#8A8D91',       // Product shots
+      chrome: '#C0C3C7'
+    },
+    semantic: {
+      success: '#10B981',
+      error: '#EF4444',
+      warning: '#F59E0B',
+      info: '#3B82F6'
+    }
+  },
+  typography: {
+    fontFamily: {
+      display: "'Inter', -apple-system, system-ui, sans-serif",
+      body: "'Inter', sans-serif",
+      mono: "'JetBrains Mono', monospace"
+    },
+    fontSize: {
+      hero: '3.75rem',        // 60px
+      h1: '2.5rem',           // 40px
+      h2: '2rem',             // 32px
+      h3: '1.5rem',           // 24px
+      body: '1rem',           // 16px
+      small: '0.875rem',      // 14px
+      tiny: '0.75rem'         // 12px
+    },
+    fontWeight: {
+      light: 300,
+      regular: 400,
+      medium: 500,
+      semibold: 600,
+      bold: 700
+    }
+  },
+  spacing: {
+    xs: '0.25rem',   // 4px
+    sm: '0.5rem',    // 8px
+    md: '1rem',      // 16px
+    lg: '1.5rem',    // 24px
+    xl: '2rem',      // 32px
+    '2xl': '3rem',   // 48px
+    '3xl': '4rem',   // 64px
+    '4xl': '6rem'    // 96px
+  },
+  borderRadius: {
+    sm: '0.25rem',
+    md: '0.5rem',
+    lg: '1rem',
+    xl: '1.5rem',
+    full: '9999px'
+  }
+};
+```
+
+---
+
+## 🏗️ COMPLETE PROJECT STRUCTURE
+```
+automation-platform/
+├── frontend/                          # React + TypeScript + Vite
+│   ├── src/
+│   │   ├── assets/
+│   │   │   ├── logo.svg
+│   │   │   └── hero-illustration.svg
+│   │   ├── components/
+│   │   │   ├── auth/
+│   │   │   │   ├── LoginForm.tsx
+│   │   │   │   ├── RegisterForm.tsx
+│   │   │   │   └── AuthLayout.tsx
+│   │   │   ├── landing/
+│   │   │   │   ├── Hero.tsx
+│   │   │   │   ├── Features.tsx
+│   │   │   │   ├── HowItWorks.tsx
+│   │   │   │   └── Pricing.tsx
+│   │   │   ├── dashboard/
+│   │   │   │   ├── DashboardLayout.tsx
+│   │   │   │   ├── Sidebar.tsx
+│   │   │   │   ├── Header.tsx
+│   │   │   │   ├── WorkflowList.tsx
+│   │   │   │   └── StatsCards.tsx
+│   │   │   ├── workflow/
+│   │   │   │   ├── ChatInterface.tsx       # 🔥 CORE: AI Chat UI
+│   │   │   │   ├── WorkflowVisualization.tsx
+│   │   │   │   ├── ProcessingAnimation.tsx # Water-drop effect
+│   │   │   │   ├── StepCard.tsx
+│   │   │   │   ├── N8NExport.tsx
+│   │   │   │   └── CredentialsGuide.tsx
+│   │   │   ├── legal/
+│   │   │   │   ├── PrivacyPolicy.tsx
+│   │   │   │   ├── TermsOfService.tsx
+│   │   │   │   ├── CookiePolicy.tsx
+│   │   │   │   └── GDPR.tsx
+│   │   │   └── common/
+│   │   │       ├── Button.tsx
+│   │   │       ├── Input.tsx
+│   │   │       ├── Card.tsx
+│   │   │       ├── Modal.tsx
+│   │   │       └── Footer.tsx
+│   │   ├── features/
+│   │   │   ├── auth/
+│   │   │   │   ├── authSlice.ts
+│   │   │   │   └── authAPI.ts
+│   │   │   └── workflow/
+│   │   │       ├── workflowSlice.ts
+│   │   │       └── workflowAPI.ts
+│   │   ├── services/
+│   │   │   ├── api.ts
+│   │   │   ├── gemini.ts              # Gemini AI integration
+│   │   │   └── websocket.ts
+│   │   ├── hooks/
+│   │   │   ├── useAuth.ts
+│   │   │   ├── useWorkflow.ts
+│   │   │   └── useChat.ts
+│   │   ├── styles/
+│   │   │   ├── global.css
+│   │   │   └── animations.css         # Water-drop animations
+│   │   ├── types/
+│   │   │   ├── auth.types.ts
+│   │   │   ├── workflow.types.ts
+│   │   │   └── n8n.types.ts
+│   │   ├── utils/
+│   │   │   ├── n8nConverter.ts
+│   │   │   └── validators.ts
+│   │   ├── App.tsx
+│   │   ├── main.tsx
+│   │   └── vite-env.d.ts
+│   ├── public/
+│   ├── index.html
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── vite.config.ts
+│   └── tailwind.config.js
+│
+├── backend/                           # Python FastAPI
+│   ├── app/
+│   │   ├── main.py
+│   │   ├── config.py
+│   │   ├── api/
+│   │   │   ├── __init__.py
+│   │   │   ├── auth.py
+│   │   │   ├── workflows.py
+│   │   │   ├── chat.py               # 🔥 CORE: NLP → N8N conversion
+│   │   │   └── n8n.py
+│   │   ├── core/
+│   │   │   ├── security.py
+│   │   │   ├── database.py
+│   │   │   └── cache.py
+│   │   ├── models/
+│   │   │   ├── user.py
+│   │   │   ├── workflow.py
+│   │   │   └── execution.py
+│   │   ├── schemas/
+│   │   │   ├── auth.py
+│   │   │   ├── workflow.py
+│   │   │   └── n8n.py
+│   │   ├── services/
+│   │   │   ├── gemini_service.py     # 🔥 Gemini 2.0 Flash integration
+│   │   │   ├── nlp_parser.py         # NLP → N8N nodes
+│   │   │   ├── n8n_converter.py
+│   │   │   └── workflow_executor.py
+│   │   └── utils/
+│   │       ├── logger.py
+│   │       └── validators.py
+│   ├── alembic/                      # Database migrations
+│   │   └── versions/
+│   ├── tests/
+│   ├── requirements.txt
+│   ├── Dockerfile
+│   └── .env.example
+│
+├── n8n-custom/                        # Custom N8N configuration
+│   ├── workflows/
+│   └── credentials/
+│
+├── docker/
+│   ├── docker-compose.yml
+│   ├── docker-compose.dev.yml
+│   ├── docker-compose.prod.yml
+│   ├── Dockerfile.frontend
+│   ├── Dockerfile.backend
+│   └── nginx.conf
+│
+├── docs/
+│   ├── API.md
+│   ├── DEPLOYMENT.md
+│   └── ARCHITECTURE.md
+│
+├── scripts/
+│   ├── start-dev.sh
+│   ├── deploy-prod.sh
+│   └── init-db.sh
+│
+├── .github/
+│   └── workflows/
+│       └── ci-cd.yml
+│
+├── .gitignore
+├── README.md
+└── LICENSE
+
+🎯 PHASE 1: COMPLETE DOCKER SETUP
+docker-compose.yml (Production-Ready)
+yamlversion: '3.9'
+
+services:
+  # Frontend - React Application
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/Dockerfile.frontend
+    container_name: automation_frontend
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+      - VITE_WS_URL=ws://localhost:8000/ws
+      - VITE_N8N_URL=http://localhost:5678
+    depends_on:
+      - backend
+    networks:
+      - automation_network
+    restart: unless-stopped
+
+  # Backend - FastAPI Python
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../docker/Dockerfile.backend
+    container_name: automation_backend
+    ports:
+      - "8000:8000"
+    environment:
+      # Database
+      - DATABASE_URL=postgresql://automation_user:SecurePass123!@postgres:5432/automation_db
+      
+      # Redis
+      - REDIS_URL=redis://redis:6379/0
+      
+      # N8N Integration
+      - N8N_API_URL=http://n8n:5678/api/v1
+      - N8N_WEBHOOK_URL=http://n8n:5678/webhook
+      
+      # Google Gemini API
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL=gemini-2.0-flash-exp
+      
+      # Security
+      - SECRET_KEY=your-super-secret-key-change-in-production-min-32-chars
+      - JWT_ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      
+      # CORS
+      - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5678
+      
+      # Environment
+      - ENVIRONMENT=development
+      - DEBUG=true
+    volumes:
+      - ./backend:/app
+      - backend_data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      n8n:
+        condition: service_started
+    networks:
+      - automation_network
+    restart: unless-stopped
+
+  # N8N Workflow Engine
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: automation_n8n
+    ports:
+      - "5678:5678"
+    environment:
+      # Basic Config
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://localhost:5678/
+      
+      # Disable Auth (internal use)
+      - N8N_BASIC_AUTH_ACTIVE=false
+      
+      # Database Config
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=n8n_db
+      - DB_POSTGRESDB_USER=automation_user
+      - DB_POSTGRESDB_PASSWORD=SecurePass123!
+      
+      # Execution Config
+      - EXECUTIONS_MODE=queue
+      - QUEUE_BULL_REDIS_HOST=redis
+      - QUEUE_BULL_REDIS_PORT=6379
+      - EXECUTIONS_DATA_SAVE_ON_SUCCESS=all
+      - EXECUTIONS_DATA_SAVE_ON_ERROR=all
+      - EXECUTIONS_DATA_SAVE_MANUAL_EXECUTIONS=true
+      
+      # Timezone
+      - GENERIC_TIMEZONE=Europe/Vienna
+      
+      # Metrics
+      - N8N_METRICS=true
+      - N8N_METRICS_PREFIX=n8n_
+      
+      # Security
+      - N8N_ENCRYPTION_KEY=your-n8n-encryption-key-min-10-chars
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./n8n-custom/workflows:/home/node/.n8n/workflows
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - automation_network
+    restart: unless-stopped
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: automation_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=automation_user
+      - POSTGRES_PASSWORD=SecurePass123!
+      - POSTGRES_DB=automation_db
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/01-init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U automation_user -d automation_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - automation_network
+    restart: unless-stopped
+
+  # Redis Cache & Queue
+  redis:
+    image: redis:7-alpine
+    container_name: automation_redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass RedisPass123!
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - automation_network
+    restart: unless-stopped
+
+  # PgAdmin (Database Management - Optional)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: automation_pgadmin
+    ports:
+      - "5050:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@automation.local
+      - PGADMIN_DEFAULT_PASSWORD=admin123
+      - PGADMIN_CONFIG_SERVER_MODE=False
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - automation_network
+    restart: unless-stopped
+    profiles:
+      - tools
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  n8n_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+  backend_data:
+    driver: local
+
+networks:
+  automation_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+
+🔥 PHASE 2: BACKEND - GEMINI AI → N8N CONVERSION ENGINE
+backend/app/services/gemini_service.py
+python"""
+Google Gemini 2.0 Flash Integration
+Converts natural language to N8N workflow structure
+"""
+
+import os
+import json
+from typing import Dict, List, Any
+import google.generativeai as genai
+from pydantic import BaseModel
+
+class WorkflowNode(BaseModel):
+    id: str
+    name: str
+    type: str
+    parameters: Dict[str, Any]
+    position: List[int]
+
+class WorkflowEdge(BaseModel):
+    source: str
+    target: str
+    type: str = "main"
+
+class N8NWorkflow(BaseModel):
+    name: str
+    nodes: List[WorkflowNode]
+    connections: Dict[str, Any]
+    settings: Dict[str, str] = {"executionOrder": "v1"}
+    staticData: None = None
+    tags: List[str] = []
+
+class GeminiWorkflowGenerator:
+    def __init__(self):
+        genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+        self.model = genai.GenerativeModel('gemini-2.0-flash-exp')
+        
+        # System instruction for N8N workflow generation
+        self.system_instruction = """You are an expert N8N workflow architect.
+        Convert user descriptions into valid N8N workflow JSON structures.
+        
+        Rules:
+        1. Always start with a Trigger node (webhook, schedule, or manual)
+        2. Each node must have: id, name, type, parameters, position [x, y]
+        3. Node types must be valid N8N nodes: webhook, httpRequest, function, if, switch, set, merge, code
+        4. Connections format: {"NodeName": {"main": [[{"node": "NextNode", "type": "main", "index": 0}]]}}
+        5. Position nodes horizontally: [250*index, 300]
+        6. Include error handling nodes when appropriate
+        
+        Node Type Mappings:
+        - "webhook trigger" → n8n-nodes-base.webhook
+        - "http request" → n8n-nodes-base.httpRequest
+        - "code/function" → n8n-nodes-base.code
+        - "condition/if" → n8n-nodes-base.if
+        - "switch/router" → n8n-nodes-base.switch
+        - "zendesk" → n8n-nodes-base.zendesk
+        - "slack" → n8n-nodes-base.slack
+        - "email" → n8n-nodes-base.emailSend
+        - "database" → n8n-nodes-base.postgres
+        - "schedule" → n8n-nodes-base.scheduleTrigger
+        
+        Return ONLY valid JSON matching this structure:
+        {
+          "name": "Workflow Name",
+          "description": "What this workflow does",
+          "nodes": [...],
+          "connections": {...},
+          "tags": ["tag1", "tag2"],
+          "steps": [
+            {
+              "stepNumber": 1,
+              "title": "Step Title",
+              "description": "What happens in this step",
+              "nodeId": "node-1",
+              "learningTip": "Why this step is important"
+            }
+          ]
+        }
+        """
+
+    async def generate_workflow(self, user_prompt: str) -> Dict[str, Any]:
+        """
+        Convert natural language prompt to N8N workflow
+        
+        Args:
+            user_prompt: User's workflow description
+            
+        Returns:
+            Complete N8N workflow structure with educational steps
+        """
+        try:
+            # Enhanced prompt with examples
+            enhanced_prompt = f"""
+            User Request: {user_prompt}
+            
+            Generate a complete N8N workflow for this request.
+            Include:
+            1. All necessary nodes with correct parameters
+            2. Proper connections between nodes
+            3. Educational steps explaining each part
+            4. Learning tips for the user
+            5. Credentials needed (if any)
+            
+            Example for "Create a chatbot that responds to webhooks":
+            {{
+              "name": "Simple Chatbot Workflow",
+              "description": "Responds to webhook messages with AI-generated replies",
+              "nodes": [
+                {{
+                  "id": "webhook-trigger",
+                  "name": "Webhook Trigger",
+                  "type": "n8n-nodes-base.webhook",
+                  "parameters": {{
+                    "path": "chatbot",
+                    "responseMode": "responseNode",
+                    "httpMethod": "POST"
+                  }},
+                  "position": [250, 300]
+                }},
+                {{
+                  "id": "process-message",
+                  "name": "Process Message",
+                  "type": "n8n-nodes-base.code",
+                  "parameters": {{
+                    "jsCode": "const message = $input.item.json.message;\\nreturn [{{ json: {{ reply: 'You said: ' + message }} }}];"
+                  }},
+                  "position": [500, 300]
+                }},
+                {{
+                  "id": "respond",
+                  "name": "Send Response",
+                  "type": "n8n-nodes-base.respondToWebhook",
+                  "parameters": {{}},
+                  "position": [750, 300]
+                }}
+              ],
+              "connections": {{
+                "Webhook Trigger": {{
+                  "main": [[{{"node": "Process Message", "type": "main", "index": 0}}]]
+                }},
+                "Process Message": {{
+                  "main": [[{{"node": "Send Response", "type": "main", "index": 0}}]]
+                }}
+              }},
+              "tags": ["chatbot", "webhook", "automation"],
+              "steps": [
+                {{
+                  "stepNumber": 1,
+                  "title": "Receive Messages",
+                  "description": "Webhook listens for incoming messages at /webhook/chatbot",
+                  "nodeId": "webhook-trigger",
+                  "learningTip": "Webhooks are the entry point for real-time data"
+                }},
+                {{
+                  "stepNumber": 2,
+                  "title": "Process & Respond",
+                  "description": "Code node processes the message and generates a reply",
+                  "nodeId": "process-message",
+                  "learningTip": "Code nodes let you write custom JavaScript logic"
+                }},
+                {{
+                  "stepNumber": 3,
+                  "title": "Send Back Response",
+                  "description": "Returns the reply to the original webhook caller",
+                  "nodeId": "respond",
+                  "learningTip": "Always close the webhook loop with a response"
+                }}
+              ],
+              "credentials": [
+                {{
+                  "name": "No credentials needed",
+                  "reason": "This is a simple webhook workflow"
+                }}
+              ],
+              "estimatedSetupTime": "2 minutes"
+            }}
+            
+            Now generate for: {user_prompt}
+            """
+            
+            # Generate with Gemini
+            response = self.model.generate_content(enhanced_prompt)
+            
+            # Parse JSON response
+            workflow_json = self._extract_json(response.text)
+            
+            # Validate and enhance
+            validated_workflow = self._validate_workflow(workflow_json)
+            
+            return validated_workflow
+            
+        except Exception as e:
+            print(f"Gemini generation error: {str(e)}")
+            return self._generate_fallback_workflow(user_prompt)
+
+    def _extract_json(self, text: str) -> Dict:
+        """Extract JSON from Gemini response (handles markdown code blocks)"""
+        try:
+            # Remove markdown code blocks
+            if "```json" in text:
+                text = text.split("```json")[1].split("```")[0]
+            elif "```" in text:
+                text = text.split("```")[1].split("```")[0]
+            
+            return json.loads(text.strip())
+        except json.JSONDecodeError as e:
+            print(f"JSON parse error: {e}")
+            # Try to fix common issues
+            text = text.replace("'", '"')  # Single to double quotes
+            return json.loads(text.strip())
+
+    def _validate_workflow(self, workflow: Dict) -> Dict:
+        """Validate and fix workflow structure"""
+        
+        # Ensure required fields
+        if "name" not in workflow:
+            workflow["name"] = "Generated Workflow"
+        
+        if "nodes" not in workflow or not workflow["nodes"]:
+            raise ValueError("Workflow must have at least one node")
+        
+        # Add missing node fields
+        for i, node in enumerate(workflow["nodes"]):
+            if "id" not in node:
+                node["id"] = f"node-{i+1}"
+            if "position" not in node:
+                node["position"] = [250 + (i * 250), 300]
+            if "parameters" not in node:
+                node["parameters"] = {}
+        
+        # Generate connections if missing
+        if "connections" not in workflow or not workflow["connections"]:
+            workflow["connections"] = self._auto_generate_connections(workflow["nodes"])
+        
+        # Add metadata
+        workflow["createdAt"] = None
+        workflow["updatedAt"] = None
+        workflow["versionId"] = None
+        
+        return workflow
+
+    def _auto_generate_connections(self, nodes: List[Dict]) -> Dict:
+        """Auto-generate linear connections between nodes"""
+        connections = {}
+        
+        for i in range(len(nodes) - 1):
+            current_node = nodes[i]["name"]
+            next_node = nodes[i + 1]["name"]
+            
+            connections[current_node] = {
+                "main": [[{
+                    "node": next_node,
+                    "type": "main",
+                    "index": 0
+                }]]
+            }
+        
+        return connections
+
+    def _generate_fallback_workflow(self, prompt: str) -> Dict:
+        """Generate a basic workflow if Gemini fails"""
+        return {
+            "name": "Basic Workflow",
+            "description": f"Workflow for: {prompt}",
+            "nodes": [
+                {
+                    "id": "manual-trigger",
+                    "name": "Manual Trigger",
+                    "type": "n8n-nodes-base.manualTrigger",
+                    "parameters": {},
+                    "position": [250, 300]
+                },
+                {
+                    "id": "code-node",
+                    "name": "Process Data",
+                    "type": "n8n-nodes-base.code",
+                    "parameters": {
+                        "jsCode": "// Add your logic here\nreturn $input.all();"
+                    },
+                    "position": [500, 300]
+                }
+            ],
+            "connections": {
+                "Manual Trigger": {
+                    "main": [[{"node": "Process Data", "type": "main", "index": 0}]]
+                }
+            },
+            "tags": ["generated", "basic"],
+            "steps": [
+                {
+                    "stepNumber": 1,
+                    "title": "Start Workflow",
+                    "description": "Manual trigger to start the workflow",
+                    "nodeId": "manual-trigger",
+                    "learningTip": "Use manual triggers for testing"
+                },
+                {
+                    "stepNumber": 2,
+                    "title": "Custom Logic",
+                    "description": "Add your custom processing logic here",
+                    "nodeId": "code-node",
+                    "learningTip": "Code nodes provide maximum flexibility"
+                }
+            ]
+        }
+
+# Initialize service
+gemini_service = GeminiWorkflowGenerator()
+
+I'll continue with the complete implementation in the next artifacts. This is getting extensive! Should I proceed with:
+
+Frontend Chat Interface (React component with water-drop animation)
+Complete Backend API (FastAPI routes)
+Authentication System (Login/Register)
+Landing Page Components (NUKI-style design)
+Legal Pages (Privacy, Terms, GDPR)
+
+Which component would you like me to generate first? 🚀RetryClaude does not have the ability to run the code it generates yet.EFrontend Chat Interface (React component with water-drop animation) and Landing Page Components (NUKI-style design)🎨 FRONTEND IMPLEMENTATION - PART 1: CHAT INTERFACE & LANDING PAGE
+📦 Complete React Application with NUKI Design System
+
+🎯 PHASE 1: PROJECT SETUP & CONFIGURATION
+frontend/package.json
+json{
+  "name": "automation-platform-frontend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.22.0",
+    "@reduxjs/toolkit": "^2.2.0",
+    "react-redux": "^9.1.0",
+    "axios": "^1.6.7",
+    "framer-motion": "^11.0.5",
+    "lucide-react": "^0.344.0",
+    "react-markdown": "^9.0.1",
+    "socket.io-client": "^4.6.1",
+    "zustand": "^4.5.0",
+    "react-hot-toast": "^2.4.1",
+    "react-syntax-highlighter": "^15.5.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.56",
+    "@types/react-dom": "^18.2.19",
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.2.2",
+    "vite": "^5.1.4",
+    "tailwindcss": "^3.4.1",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.35",
+    "eslint": "^8.56.0"
+  }
+}
+frontend/tailwind.config.js
+javascript/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        // NUKI Brand Colors
+        primary: {
+          yellow: '#F5C842',
+          'yellow-hover': '#E6B831',
+          'yellow-light': '#FFF4D6',
+          'yellow-dark': '#D4A520'
+        },
+        neutral: {
+          darkest: '#0A0A0A',
+          dark: '#1A1A1A',
+          800: '#2A2A2A',
+          700: '#404040',
+          600: '#5A5A5A',
+          500: '#808080',
+          400: '#9A9A9A',
+          300: '#B0B0B0',
+          200: '#D0D0D0',
+          100: '#E0E0E0',
+          50: '#F5F5F5'
+        },
+        accent: {
+          steel: '#8A8D91',
+          chrome: '#C0C3C7',
+          silver: '#E8E9EA'
+        },
+        semantic: {
+          success: '#10B981',
+          'success-light': '#D1FAE5',
+          error: '#EF4444',
+          'error-light': '#FEE2E2',
+          warning: '#F59E0B',
+          'warning-light': '#FEF3C7',
+          info: '#3B82F6',
+          'info-light': '#DBEAFE'
+        }
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace']
+      },
+      fontSize: {
+        'hero': ['3.75rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+        'display': ['3rem', { lineHeight: '1.2', letterSpacing: '-0.02em' }],
+        'h1': ['2.5rem', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
+        'h2': ['2rem', { lineHeight: '1.3' }],
+        'h3': ['1.5rem', { lineHeight: '1.4' }],
+        'body-lg': ['1.125rem', { lineHeight: '1.6' }],
+        'body': ['1rem', { lineHeight: '1.6' }],
+        'body-sm': ['0.875rem', { lineHeight: '1.5' }],
+        'caption': ['0.75rem', { lineHeight: '1.4' }]
+      },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+        '128': '32rem'
+      },
+      borderRadius: {
+        'xl': '1rem',
+        '2xl': '1.5rem',
+        '3xl': '2rem'
+      },
+      boxShadow: {
+        'glow': '0 0 20px rgba(245, 200, 66, 0.3)',
+        'glow-strong': '0 0 30px rgba(245, 200, 66, 0.5)',
+        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2)',
+        'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3)'
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.5s ease-in-out',
+        'slide-up': 'slideUp 0.6s ease-out',
+        'slide-down': 'slideDown 0.6s ease-out',
+        'scale-in': 'scaleIn 0.4s ease-out',
+        'water-drop': 'waterDrop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)',
+        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
+        'float': 'float 3s ease-in-out infinite'
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' }
+        },
+        slideUp: {
+          '0%': { transform: 'translateY(20px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' }
+        },
+        slideDown: {
+          '0%': { transform: 'translateY(-20px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' }
+        },
+        scaleIn: {
+          '0%': { transform: 'scale(0.9)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' }
+        },
+        waterDrop: {
+          '0%': { 
+            transform: 'translateY(-100%) scale(0.5)', 
+            opacity: '0' 
+          },
+          '50%': { 
+            transform: 'translateY(10px) scale(1.05)', 
+            opacity: '1' 
+          },
+          '70%': { 
+            transform: 'translateY(-5px) scale(0.98)' 
+          },
+          '100%': { 
+            transform: 'translateY(0) scale(1)', 
+            opacity: '1' 
+          }
+        },
+        pulseGlow: {
+          '0%, 100%': { 
+            boxShadow: '0 0 20px rgba(245, 200, 66, 0.3)' 
+          },
+          '50%': { 
+            boxShadow: '0 0 30px rgba(245, 200, 66, 0.6)' 
+          }
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-10px)' }
+        }
+      }
+    }
+  },
+  plugins: []
+}
+frontend/src/styles/animations.css
+css/* Advanced Animation Styles */
+
+/* Water Drop Effect */
+@keyframes water-drop-ripple {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+
+.water-drop-container {
+  position: relative;
+}
+
+.water-drop-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: radial-gradient(circle, rgba(245, 200, 66, 0.4) 0%, transparent 70%);
+  animation: water-drop-ripple 1s ease-out;
+  pointer-events: none;
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, #F5C842 0%, #FFD700 50%, #FFA500 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass Morphism */
+.glass-card {
+  background: rgba(26, 26, 26, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Shimmer Loading Effect */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Typing Indicator */
+@keyframes typing-dot {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #F5C842;
+  animation: typing-dot 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Scroll Indicator */
+@keyframes scroll-down {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+}
+
+.scroll-indicator {
+  animation: scroll-down 2s infinite;
+}
+
+🎨 LANDING PAGE COMPONENTS
+frontend/src/components/landing/Hero.tsx
+typescriptimport React from 'react';
+import { motion } from 'framer-motion';
+import { ArrowRight, Sparkles, Zap, Bot } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+export const Hero: React.FC = () => {
+  const navigate = useNavigate();
+
+  return (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-neutral-darkest">
+      {/* Animated Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-yellow/10 rounded-full blur-3xl animate-float" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-chrome/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 text-center">
+        {/* Badge */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="inline-flex items-center gap-2 px-4 py-2 mb-8 bg-neutral-dark border border-primary-yellow/30 rounded-full"
+        >
+          <Sparkles className="w-4 h-4 text-primary-yellow" />
+          <span className="text-sm text-neutral-100">AI-Powered Workflow Automation</span>
+        </motion.div>
+
+        {/* Main Headline */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="text-hero font-bold text-white mb-6 leading-tight"
+        >
+          Pioneering{' '}
+          <span className="gradient-text">Intelligent</span>
+          <br />
+          Workflow Automation
+        </motion.h1>
+
+        {/* Subheadline */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="text-body-lg text-neutral-300 mb-4 max-w-2xl mx-auto"
+        >
+          Transform your ideas into powerful N8N workflows with AI.
+          <br />
+          No coding required. Just describe what you need.
+        </motion.p>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="text-body text-neutral-400 mb-12"
+        >
+          Innovated in Austria • Enterprise-Ready • GDPR Compliant
+        </motion.p>
+
+        {/* CTA Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="flex items-center justify-center gap-4 flex-wrap"
+        >
+          <button
+            onClick={() => navigate('/register')}
+            className="group relative px-8 py-4 bg-primary-yellow hover:bg-primary-yellow-hover text-neutral-darkest font-semibold rounded-xl transition-all duration-300 shadow-glow hover:shadow-glow-strong flex items-center gap-2"
+          >
+            <Zap className="w-5 h-5" />
+            Create Your First Workflow
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </button>
+
+          <button
+            onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
+            className="px-8 py-4 bg-transparent border-2 border-neutral-600 hover:border-primary-yellow text-white font-semibold rounded-xl transition-all duration-300"
+          >
+            See How It Works
+          </button>
+        </motion.div>
+
+        {/* Trust Indicators */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1 }}
+          className="mt-16 flex items-center justify-center gap-8 text-neutral-500 text-sm"
+        >
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-semantic-success rounded-full animate-pulse" />
+            <span>N8N Compatible</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Bot className="w-4 h-4" />
+            <span>AI-Powered</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span>🇦🇹</span>
+            <span>Made in Austria</span>
+          </div>
+        </motion.div>
+
+        {/* Animated Product Showcase */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.8 }}
+          className="mt-20 relative"
+        >
+          {/* Floating Cards Animation (inspired by NUKI products) */}
+          <div className="relative h-96 flex items-center justify-center">
+            {[
+              { icon: Bot, label: 'Chatbots', color: 'bg-semantic-info', delay: 0 },
+              { icon: Zap, label: 'Automations', color: 'bg-primary-yellow', delay: 0.2 },
+              { icon: Sparkles, label: 'Analytics', color: 'bg-accent-chrome', delay: 0.4 }
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50, rotate: -10 }}
+                animate={{ 
+                  opacity: 1, 
+                  y: 0, 
+                  rotate: index === 1 ? 0 : index === 0 ? -5 : 5 
+                }}
+                transition={{ 
+                  duration: 0.8, 
+                  delay: 1.2 + item.delay,
+                  type: 'spring',
+                  stiffness: 100
+                }}
+                className="absolute glass-card p-8 rounded-2xl shadow-card-hover animate-float"
+                style={{
+                  left: index === 0 ? '10%' : index === 1 ? '50%' : 'auto',
+                  right: index === 2 ? '10%' : 'auto',
+                  transform: index === 1 ? 'translateX(-50%)' : 'none',
+                  animationDelay: `${index * 0.5}s`
+                }}
+              >
+                <div className={`w-16 h-16 ${item.color} rounded-xl flex items-center justify-center mb-4`}>
+                  <item.icon className="w-8 h-8 text-neutral-darkest" />
+                </div>
+                <p className="text-white font-semibold">{item.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 2 }}
+          className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
+        >
+          <div className="scroll-indicator">
+            <ArrowRight className="w-6 h-6 text-primary-yellow rotate-90" />
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+frontend/src/components/landing/Features.tsx
+typescriptimport React from 'react';
+import { motion } from 'framer-motion';
+import { Bot, Zap, BarChart3, Shield, Code, Workflow } from 'lucide-react';
+
+const features = [
+  {
+    icon: Bot,
+    title: 'AI-Powered Generation',
+    description: 'Describe your workflow in plain English. Our AI transforms it into a complete N8N workflow instantly.',
+    color: 'bg-semantic-info',
+    gradient: 'from-semantic-info to-blue-600'
+  },
+  {
+    icon: Zap,
+    title: 'N8N Compatible',
+    description: 'Export workflows as standard N8N JSON. Upload directly to your N8N instance without modifications.',
+    color: 'bg-primary-yellow',
+    gradient: 'from-primary-yellow to-yellow-600'
+  },
+  {
+    icon: BarChart3,
+    title: 'Real-Time Analytics',
+    description: 'Monitor workflow performance with live dashboards. Track executions, success rates, and costs.',
+    color: 'bg-accent-steel',
+    gradient: 'from-accent-steel to-gray-600'
+  },
+  {
+    icon: Workflow,
+    title: 'Visual Builder',
+    description: 'Intuitive drag-and-drop interface. See your workflow structure in real-time as AI builds it.',
+    color: 'bg-semantic-success',
+    gradient: 'from-semantic-success to-green-600'
+  },
+  {
+    icon: Code,
+    title: 'Custom Integrations',
+    description: 'Connect with 200+ services. Zendesk, Slack, databases, APIs, and more out of the box.',
+    color: 'bg-semantic-warning',
+    gradient: 'from-semantic-warning to-orange-600'
+  },
+  {
+    icon: Shield,
+    title: 'Enterprise Security',
+    description: 'GDPR compliant. Encrypted credentials. Audit logs. Built for Austrian and EU regulations.',
+    color: 'bg-semantic-error',
+    gradient: 'from-semantic-error to-red-600'
+  }
+];
+
+export const Features: React.FC = () => {
+  return (
+    <section className="py-24 bg-neutral-dark">
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <span className="inline-block px-4 py-2 bg-primary-yellow/10 text-primary-yellow rounded-full text-sm font-semibold mb-4">
+            Features
+          </span>
+          <h2 className="text-h1 font-bold text-white mb-4">
+            Everything You Need to Automate
+          </h2>
+          <p className="text-body-lg text-neutral-400 max-w-2xl mx-auto">
+            Professional automation tools powered by cutting-edge AI technology
+          </p>
+        </motion.div>
+
+        {/* Features Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="group relative"
+            >
+              {/* Card */}
+              <div className="h-full glass-card p-8 rounded-2xl hover:border-primary-yellow/50 transition-all duration-300">
+                {/* Icon */}
+                <div className={`w-14 h-14 rounded-xl ${feature.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  <feature.icon className="w-7 h-7 text-white" />
+                </div>
+
+                {/* Content */}
+                <h3 className="text-h3 font-semibold text-white mb-3">
+                  {feature.title}
+                </h3>
+                <p className="text-body text-neutral-400 leading-relaxed">
+                  {feature.description}
+                </p>
+
+                {/* Hover Gradient Effect */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-300 pointer-events-none`} />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+frontend/src/components/landing/HowItWorks.tsx
+typescriptimport React from 'react';
+import { motion } from 'framer-motion';
+import { MessageSquare, Sparkles, Download, Play } from 'lucide-react';
+
+const steps = [
+  {
+    number: '01',
+    icon: MessageSquare,
+    title: 'Describe Your Workflow',
+    description: 'Tell our AI what you want to automate in plain English. No technical knowledge required.',
+    example: '"Create a chatbot that answers support tickets and sends summaries to Slack"'
+  },
+  {
+    number: '02',
+    icon: Sparkles,
+    title: 'AI Builds Instantly',
+    description: 'Watch as AI generates a complete N8N workflow with all nodes, connections, and logic configured.',
+    example: 'Webhook → NLP Processing → Zendesk → Slack in seconds'
+  },
+  {
+    number: '03',
+    icon: Download,
+    title: 'Export to N8N',
+    description: 'Download the workflow as standard N8N JSON. Upload it to your N8N instance with one click.',
+    example: 'workflow-chatbot-support.json ready to import'
+  },
+  {
+    number: '04',
+    icon: Play,
+    title: 'Run & Monitor',
+    description: 'Execute workflows and track performance with real-time analytics. Optimize and scale effortlessly.',
+    example: '1,000+ executions/day • 99.8% success rate'
+  }
+];
+
+export const HowItWorks: React.FC = () => {
+  return (
+    <section id="how-it-works" className="py-24 bg-neutral-darkest relative overflow-hidden">
+      {/* Background Decoration */}
+      <div className="absolute top-0 right-0 w-1/2 h-full opacity-5">
+        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-primary-yellow rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-20"
+        >
+          <span className="inline-block px-4 py-2 bg-primary-yellow/10 text-primary-yellow rounded-full text-sm font-semibold mb-4">
+            How It Works
+          </span>
+          <h2 className="text-h1 font-bold text-white mb-4">
+            From Idea to Automation in Minutes
+          </h2>
+          <p className="text-body-lg text-neutral-400 max-w-2xl mx-auto">
+            Four simple steps to transform your workflow ideas into reality
+          </p>
+        </motion.div>
+
+        {/* Steps */}
+        <div className="space-y-16">
+          {steps.map((step, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: index * 0.2 }}
+              className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-12`}
+            >
+              {/* Content */}
+              <div className="flex-1">
+                <div className="flex items-center gap-4 mb-4">
+                  <span className="text-6xl font-bold text-primary-yellow/20">
+                    {step.number}
+                  </span>
+                  <div className="w-12 h-12 bg-primary-yellow rounded-xl flex items-center justify-center">
+                    <step.icon className="w-6 h-6 text-neutral-darkest" />
+                  </div>
+                </div>
+
+                <h3 className="text-h2 font-bold text-white mb-4">
+                  {step.title}
+                </h3>
+                <p className="text-body-lg text-neutral-300 mb-6 leading-relaxed">
+                  {step.description}
+                </p>
+
+                {/* Example Badge */}
+                <div className="inline-flex items-start gap-3 p-4 bg-neutral-dark border border-neutral-700 rounded-xl">
+                  <Sparkles className="w-5 h-5 text-primary-yellow flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm text-neutral-500 mb-1">Example:</p>
+                    <p className="text-body-sm text-neutral-300 font-mono">
+                      {step.example}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Visual */}
+              <div className="flex-1">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.3 }}
+                  className="relative"
+                >
+                  <div className="glass-card p-8 rounded-2xl shadow-card-hover">
+                    {/* Placeholder for step visualization */}
+                    <div className="aspect-video bg-neutral-800 rounded-xl flex items-center justify-center">
+                      <step.icon className="w-16 h-16 text-primary-yellow/30" />
+                    </div>
+                  </div>
+
+                  {/* Glow Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary-yellow/20 to-transparent rounded-2xl blur-2xl -z-10" />
+                </motion.div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};==========================
+Below is a complete, production-quality React component for the core workflow creation chat. It respects:
+
+center intro text before first input
+
+NLP prompt from user
+
+fake async “building” phase with typing dots
+
+step cards dropping in with the “water-drop” / bounce effect
+
+final export panel with “Open in n8n”, credentials, and run/monitor guidance
+
+Path: frontend/src/components/workflow/ChatInterface.tsx
+
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Send,
+  Settings,
+  Download,
+  PlayCircle,
+  KeyRound,
+  AlertTriangle,
+  Bot,
+  Workflow
+} from 'lucide-react';
+
+// Types for workflow response from backend
+type WorkflowStep = {
+  stepNumber: number;
+  title: string;
+  description: string;
+  nodeId: string;
+  learningTip: string;
+};
+
+type CredentialHint = {
+  name: string;
+  reason: string;
+};
+
+type GeneratedWorkflow = {
+  name: string;
+  description: string;
+  nodes: any[];
+  connections: Record<string, any>;
+  steps: WorkflowStep[];
+  credentials?: CredentialHint[];
+};
+
+interface ChatInterfaceProps {
+  onExportToN8N?: (data: GeneratedWorkflow) => void;
+  // optional prop to hook download / POST to n8n
+}
+
+const ChatInterface: React.FC<ChatInterfaceProps> = ({ onExportToN8N }) => {
+  const [userPrompt, setUserPrompt] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [workflow, setWorkflow] = useState<GeneratedWorkflow | null>(null);
+
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
+  // Auto-scroll to bottom when workflow updates
+  useEffect(() => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [workflow, isGenerating]);
+
+  // Simulate calling backend FastAPI /chat -> Gemini -> n8n JSON
+  // In production:
+  // const res = await axios.post('/api/chat/generate-workflow', { prompt: userPrompt });
+  // setWorkflow(res.data)
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!userPrompt.trim()) return;
+
+    setIsGenerating(true);
+    setWorkflow(null);
+
+    // FAKE DEMO PAYLOAD (replace with backend response)
+    // This matches the shape your FastAPI gemini_service.generate_workflow() returns
+    setTimeout(() => {
+      const demoWorkflow: GeneratedWorkflow = {
+        name: "Zendesk → AI Summary → Slack Alert",
+        description:
+          "When a new Zendesk ticket is created, generate an AI summary and post it to Slack.",
+        nodes: [
+          {
+            id: "node-1",
+            name: "Zendesk Trigger",
+            type: "n8n-nodes-base.zendesk",
+            parameters: {
+              operation: "newTicket",
+              subdomain: "your-team",
+            },
+            position: [250, 300],
+          },
+          {
+            id: "node-2",
+            name: "Summarize Ticket (Gemini)",
+            type: "n8n-nodes-base.code",
+            parameters: {
+              jsCode:
+                "// call Gemini 2.0 Flash API to summarize ticket\n// return { summary }",
+            },
+            position: [500, 300],
+          },
+          {
+            id: "node-3",
+            name: "Post to Slack",
+            type: "n8n-nodes-base.slack",
+            parameters: {
+              channel: "#support-alerts",
+              text: "New ticket summary attached...",
+            },
+            position: [750, 300],
+          },
+        ],
+        connections: {
+          "Zendesk Trigger": {
+            main: [[{ node: "Summarize Ticket (Gemini)", type: "main", index: 0 }]],
+          },
+          "Summarize Ticket (Gemini)": {
+            main: [[{ node: "Post to Slack", type: "main", index: 0 }]],
+          },
+        },
+        steps: [
+          {
+            stepNumber: 1,
+            title: "Listen for new Zendesk tickets",
+            description:
+              "This node triggers whenever a new customer ticket is created.",
+            nodeId: "node-1",
+            learningTip:
+              "This replaces manual inbox checking and speeds up response time.",
+          },
+          {
+            stepNumber: 2,
+            title: "Generate AI summary",
+            description:
+              "We send the ticket content to Gemini 2.0 Flash to create a short summary.",
+            nodeId: "node-2",
+            learningTip:
+              "Agents don't have to read huge walls of text, they get signal instantly.",
+          },
+          {
+            stepNumber: 3,
+            title: "Send alert to Slack",
+            description:
+              "We notify the support channel with the summary, priority, and customer context.",
+            nodeId: "node-3",
+            learningTip:
+              "This keeps the whole team aligned without opening Zendesk.",
+          },
+        ],
+        credentials: [
+          {
+            name: "Zendesk API Key",
+            reason: "Needed to read new tickets from your helpdesk",
+          },
+          {
+            name: "Slack Bot Token",
+            reason: "Required to post messages into your Slack channel",
+          },
+          {
+            name: "Gemini API Key",
+            reason: "Used to summarize the ticket content using AI",
+          },
+        ],
+      };
+
+      setWorkflow(demoWorkflow);
+      setIsGenerating(false);
+    }, 1200);
+  };
+
+  const handleExport = () => {
+    if (workflow && onExportToN8N) {
+      onExportToN8N(workflow);
+    }
+    // You can also trigger download of workflow JSON here
+    // const blob = new Blob([JSON.stringify(workflow, null, 2)], { type: "application/json" });
+    // const url = URL.createObjectURL(blob);
+    // create <a download="workflow.json"> ...
+  };
+
+  return (
+    <div className="min-h-screen bg-neutral-darkest text-white flex flex-col">
+      {/* Header / Breadcrumb */}
+      <header className="border-b border-neutral-700 bg-neutral-dark px-6 py-4 flex items-center justify-between">
+        <div className="flex flex-col">
+          <span className="text-sm text-neutral-500 uppercase tracking-wide flex items-center gap-2">
+            <Workflow className="w-4 h-4 text-primary-yellow" />
+            New Workflow
+          </span>
+          <h1 className="text-h3 font-semibold text-white">
+            Design your automation
+          </h1>
+          <p className="text-body-sm text-neutral-500">
+            Natural language → executable n8n workflow
+          </p>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <button className="px-4 py-2 rounded-xl bg-neutral-800 border border-neutral-600 hover:border-neutral-400 text-body-sm text-neutral-200 flex items-center gap-2">
+            <Settings className="w-4 h-4 text-neutral-400" />
+            <span>Settings</span>
+          </button>
+
+          <button
+            onClick={handleExport}
+            disabled={!workflow}
+            className={`px-4 py-2 rounded-xl font-semibold flex items-center gap-2 ${
+              workflow
+                ? 'bg-primary-yellow text-neutral-darkest shadow-glow hover:bg-primary-yellow-hover hover:shadow-glow-strong'
+                : 'bg-neutral-800 text-neutral-600 border border-neutral-700 cursor-not-allowed'
+            }`}
+          >
+            <Download className="w-4 h-4" />
+            <span>Open in n8n</span>
+          </button>
+        </div>
+      </header>
+
+      {/* Body */}
+      <main className="flex-1 overflow-y-auto px-6 py-10 flex flex-col items-center">
+        {/* Initial Center Intro */}
+        {!workflow && !isGenerating && (
+          <div className="max-w-xl text-center mb-10 animate-fade-in">
+            <div className="text-h2 font-bold text-white leading-tight mb-4">
+              Hi! Let’s turn your idea
+              <br />
+              into an intelligent workflow.
+            </div>
+            <div className="text-body-lg text-neutral-400">
+              Describe what you want to automate.
+              <br />
+              I’ll build it as an executable n8n workflow.
+            </div>
+          </div>
+        )}
+
+        {/* User Input Form */}
+        <form
+          onSubmit={handleSubmit}
+          className="w-full max-w-2xl bg-neutral-dark border border-neutral-700 rounded-2xl p-4 shadow-card glass-card"
+        >
+          <label className="block text-neutral-300 text-sm mb-2 font-medium">
+            Your workflow idea
+          </label>
+          <textarea
+            className="w-full bg-neutral-darkest text-white p-4 rounded-xl border border-neutral-700 focus:border-primary-yellow outline-none font-mono text-sm min-h-[120px]"
+            placeholder={`Example: When a new Zendesk ticket arrives, summarize it with AI and post it to Slack with priority and sentiment.`}
+            value={userPrompt}
+            onChange={(e) => setUserPrompt(e.target.value)}
+          />
+          <div className="flex justify-end mt-4">
+            <button
+              type="submit"
+              disabled={isGenerating}
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary-yellow text-neutral-darkest font-semibold shadow-glow hover:shadow-glow-strong hover:bg-primary-yellow-hover transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Send className="w-4 h-4" />
+              <span>Generate Workflow</span>
+            </button>
+          </div>
+        </form>
+
+        {/* Loading Indicator */}
+        {isGenerating && (
+          <div className="mt-10 flex flex-col items-center text-center">
+            <div className="flex items-center gap-2 text-neutral-400 text-body">
+              <Bot className="w-5 h-5 text-primary-yellow" />
+              <span>Analyzing your request…</span>
+            </div>
+
+            <div className="flex gap-2 mt-4">
+              <div className="typing-dot" />
+              <div className="typing-dot" />
+              <div className="typing-dot" />
+            </div>
+
+            <div className="mt-4 text-neutral-600 text-sm">
+              Generating nodes, steps, and n8n connections
+            </div>
+          </div>
+        )}
+
+        {/* Generated Workflow Output */}
+        {workflow && (
+          <div className="w-full max-w-4xl mt-12 space-y-10 animate-fade-in">
+            {/* Summary Card */}
+            <section className="glass-card rounded-2xl border border-neutral-700 shadow-card p-6">
+              <h2 className="text-h3 font-semibold text-white mb-2">
+                {workflow.name}
+              </h2>
+              <p className="text-body text-neutral-400 leading-relaxed">
+                {workflow.description}
+              </p>
+            </section>
+
+            {/* Steps Reveal */}
+            <section>
+              <h3 className="text-h3 font-semibold text-white mb-4 flex items-center gap-2">
+                <Workflow className="w-5 h-5 text-primary-yellow" />
+                Process Steps
+              </h3>
+
+              <div className="space-y-6">
+                <AnimatePresence>
+                  {workflow.steps.map((step) => (
+                    <motion.div
+                      key={step.stepNumber}
+                      initial={{ opacity: 0, y: -40, scale: 0.8 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{
+                        duration: 0.5,
+                        type: 'spring',
+                        stiffness: 120,
+                      }}
+                      className="relative glass-card border border-neutral-700 rounded-2xl p-6 shadow-card overflow-hidden"
+                    >
+                      {/* ripple / water drop visual */}
+                      <div className="water-drop-container absolute inset-0 pointer-events-none">
+                        <div className="water-drop-ripple" />
+                      </div>
+
+                      <div className="relative z-10 flex flex-col md:flex-row md:items-start gap-4">
+                        <div className="flex-shrink-0">
+                          <div className="w-12 h-12 rounded-xl bg-primary-yellow flex items-center justify-center font-bold text-neutral-darkest text-lg">
+                            {String(step.stepNumber).padStart(2, '0')}
+                          </div>
+                        </div>
+
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h4 className="text-h3 text-white font-semibold">
+                              {step.title}
+                            </h4>
+                            <span className="text-xs text-neutral-500 font-mono border border-neutral-700 rounded-lg px-2 py-1">
+                              node: {step.nodeId}
+                            </span>
+                          </div>
+
+                          <p className="text-body text-neutral-300 mt-2 leading-relaxed">
+                            {step.description}
+                          </p>
+
+                          <div className="mt-4 text-neutral-500 text-sm flex items-start gap-2">
+                            <AlertTriangle className="w-4 h-4 text-primary-yellow flex-shrink-0" />
+                            <span className="leading-relaxed">
+                              {step.learningTip}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+            </section>
+
+            {/* Credentials & Run Guidance */}
+            <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Credentials */}
+              <div className="glass-card rounded-2xl border border-neutral-700 shadow-card p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <KeyRound className="w-5 h-5 text-primary-yellow" />
+                  <h3 className="text-h3 font-semibold text-white">
+                    Credentials you’ll need
+                  </h3>
+                </div>
+
+                {workflow.credentials && workflow.credentials.length > 0 ? (
+                  <ul className="space-y-4">
+                    {workflow.credentials.map((cred, idx) => (
+                      <li
+                        key={idx}
+                        className="bg-neutral-dark border border-neutral-700 rounded-xl p-4"
+                      >
+                        <div className="text-white font-medium">
+                          {cred.name}
+                        </div>
+                        <div className="text-neutral-400 text-sm leading-relaxed">
+                          {cred.reason}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-neutral-500 text-sm">
+                    No external credentials required for this workflow.
+                  </p>
+                )}
+
+                <p className="text-neutral-600 text-xs mt-4 leading-relaxed">
+                  We never store your production credentials.  
+                  You’ll add them directly inside your own n8n instance.
+                </p>
+              </div>
+
+              {/* Run & Monitor */}
+              <div className="glass-card rounded-2xl border border-neutral-700 shadow-card p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <PlayCircle className="w-5 h-5 text-primary-yellow" />
+                  <h3 className="text-h3 font-semibold text-white">
+                    Run & Monitor
+                  </h3>
+                </div>
+
+                <ol className="space-y-4 text-neutral-300 text-sm leading-relaxed">
+                  <li className="bg-neutral-dark border border-neutral-700 rounded-xl p-4">
+                    <span className="text-primary-yellow font-semibold">
+                      1. Export Workflow:
+                    </span>{' '}
+                    Click “Open in n8n” to download/import the generated JSON.
+                  </li>
+                  <li className="bg-neutral-dark border border-neutral-700 rounded-xl p-4">
+                    <span className="text-primary-yellow font-semibold">
+                      2. Add Credentials:
+                    </span>{' '}
+                    In n8n, go to Credentials → add Zendesk, Slack, Gemini API keys.
+                  </li>
+                  <li className="bg-neutral-dark border border-neutral-700 rounded-xl p-4">
+                    <span className="text-primary-yellow font-semibold">
+                      3. Activate Workflow:
+                    </span>{' '}
+                    Enable it in n8n so it starts listening to real events.
+                  </li>
+                  <li className="bg-neutral-dark border border-neutral-700 rounded-xl p-4">
+                    <span className="text-primary-yellow font-semibold">
+                      4. Monitor:
+                    </span>{' '}
+                    Watch execution logs and error rates. Adjust thresholds, retry logic,
+                    and alert channels as needed.
+                  </li>
+                </ol>
+
+                <p className="text-neutral-600 text-xs mt-4 leading-relaxed">
+                  Your data stays on your infrastructure.  
+                  We generate logic — you stay in control.
+                </p>
+              </div>
+            </section>
+
+            <div ref={bottomRef} />
+          </div>
+        )}
+      </main>
+
+      {/* Footer */}
+      <footer className="mt-auto border-t border-neutral-800 bg-neutral-dark px-6 py-6 text-center text-neutral-600 text-sm">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 flex-wrap">
+          <a className="hover:text-primary-yellow transition-colors" href="/privacy">
+            Privacy Policy
+          </a>
+          <a className="hover:text-primary-yellow transition-colors" href="/terms">
+            Terms of Service
+          </a>
+          <a className="hover:text-primary-yellow transition-colors" href="/cookie-policy">
+            Cookie Policy
+          </a>
+          <a className="hover:text-primary-yellow transition-colors" href="/gdpr">
+            GDPR / Data Protection
+          </a>
+        </div>
+        <div className="mt-4 text-neutral-500">
+          Built by El Houcine Idousaid
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default ChatInterface;
+
+
+This component:
+
+Shows the centered intro line you wanted.
+
+Uses your exact sentence:
+"Hi! Let’s turn your idea into an intelligent workflow."
+
+Simulates Gemini → n8n plan.
+
+Reveals steps with animated “drop” cards.
+
+Includes "Open in n8n", credentials, and Run & Monitor guidance.
+
+Uses the NUKI-style dark/yellow aesthetic and glass cards.
+
+Includes footer with your signature.============
+Built by El Houcine Idousaid 
+
+==========================================
+When I say WorkflowList, I mean the screen (inside the dashboard) that shows all the workflows the user has already generated with the AI.
+Think of it like “your library of automations.”
+Here’s what it needs to do and then I’ll give you full production React code for it:
+
+
+Show each saved workflow:
+
+
+Workflow name
+
+
+Short description / purpose
+
+
+Status (Draft, Active, Error, etc.)
+
+
+Last updated date
+
+
+Runs / success rate (basic stats)
+
+
+
+
+Actions for each workflow:
+
+
+“Open” → view/edit it (or re-open in the ChatInterface view to regenerate/change)
+
+
+“Export to n8n” → download the n8n JSON again
+
+
+“Run & Monitor” → jumps to analytics (for v2)
+
+
+
+
+“+ Create New Workflow” button at the top → sends you to /workflow/new (the chat builder we already built).
+
+
+This is exactly what your dashboard needs to feel like a SaaS, not just a playground.
+Now I’ll give you two components:
+
+
+DashboardLayout.tsx (the whole dashboard page shell with sidebar, header, footer)
+
+
+WorkflowList.tsx (the actual list/table of workflows in that dashboard)
+
+
+These are production-style React + Tailwind, aligned with the same dark / yellow / glass aesthetic you’re using. You can drop them into frontend/src/components/dashboard/.
+
+DashboardLayout.tsx
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  PlusCircle,
+  BarChart3,
+  FolderTree,
+  Settings,
+  Shield,
+  LogOut,
+  User,
+} from "lucide-react";
+
+type DashboardLayoutProps = {
+  children: React.ReactNode;
+  userEmail?: string;
+  onLogout?: () => void;
+};
+
+const DashboardLayout: React.FC<DashboardLayoutProps> = ({
+  children,
+  userEmail = "you@example.com",
+  onLogout,
+}) => {
+  const navigate = useNavigate();
+
+  return (
+    <div className="min-h-screen bg-neutral-darkest text-white flex flex-col">
+      {/* MAIN WRAPPER */}
+      <div className="flex flex-1 min-h-0">
+        {/* SIDEBAR */}
+        <aside className="w-64 bg-neutral-dark border-r border-neutral-800 flex flex-col p-6">
+          {/* Brand / App Name */}
+          <div
+            className="flex items-center gap-2 mb-8 cursor-pointer"
+            onClick={() => navigate("/dashboard")}
+          >
+            <div className="w-9 h-9 bg-primary-yellow rounded-xl flex items-center justify-center font-bold text-neutral-darkest text-sm shadow-glow">
+              AI
+            </div>
+            <div className="flex flex-col leading-tight">
+              <span className="text-neutral-100 font-semibold text-sm">
+                Workflow Studio
+              </span>
+              <span className="text-neutral-500 text-xs">
+                by El Houcine Idousaid
+              </span>
+            </div>
+          </div>
+
+          {/* Nav */}
+          <nav className="flex-1 space-y-2">
+            <button
+              className="w-full flex items-center gap-3 text-left px-3 py-3 rounded-xl bg-neutral-800/60 border border-neutral-700 hover:border-primary-yellow/40 transition-all group"
+              onClick={() => navigate("/dashboard")}
+            >
+              <FolderTree className="w-4 h-4 text-primary-yellow group-hover:shadow-glow" />
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-neutral-100">
+                  Workflows
+                </span>
+                <span className="text-xs text-neutral-500">
+                  Your automations
+                </span>
+              </div>
+            </button>
+
+            <button
+              className="w-full flex items-center gap-3 text-left px-3 py-3 rounded-xl border border-transparent hover:border-neutral-600 hover:bg-neutral-800/40 transition-all"
+              onClick={() => navigate("/analytics")}
+            >
+              <BarChart3 className="w-4 h-4 text-neutral-400" />
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-neutral-100">
+                  Analytics
+                </span>
+                <span className="text-xs text-neutral-500">
+                  Runs & success rate
+                </span>
+              </div>
+            </button>
+
+            <button
+              className="w-full flex items-center gap-3 text-left px-3 py-3 rounded-xl border border-transparent hover:border-neutral-600 hover:bg-neutral-800/40 transition-all"
+              onClick={() => navigate("/settings")}
+            >
+              <Settings className="w-4 h-4 text-neutral-400" />
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-neutral-100">
+                  Settings
+                </span>
+                <span className="text-xs text-neutral-500">
+                  API keys & preferences
+                </span>
+              </div>
+            </button>
+
+            <button
+              className="w-full flex items-center gap-3 text-left px-3 py-3 rounded-xl border border-transparent hover:border-neutral-600 hover:bg-neutral-800/40 transition-all"
+              onClick={() => navigate("/legal")}
+            >
+              <Shield className="w-4 h-4 text-neutral-400" />
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-neutral-100">
+                  Legal & Compliance
+                </span>
+                <span className="text-xs text-neutral-500">
+                  GDPR / Privacy / Terms
+                </span>
+              </div>
+            </button>
+          </nav>
+
+          {/* User Area */}
+          <div className="mt-6 border-t border-neutral-800 pt-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-neutral-800 border border-neutral-700 flex items-center justify-center">
+                <User className="w-5 h-5 text-primary-yellow" />
+              </div>
+              <div className="leading-tight">
+                <div className="text-sm text-neutral-100 font-medium truncate max-w-[11rem]">
+                  {userEmail}
+                </div>
+                <div className="text-xs text-neutral-500">Active</div>
+              </div>
+            </div>
+
+            <button
+              className="w-full flex items-center gap-2 text-left text-xs text-neutral-500 hover:text-primary-yellow transition-colors"
+              onClick={onLogout}
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Sign out</span>
+            </button>
+          </div>
+        </aside>
+
+        {/* MAIN CONTENT AREA */}
+        <section className="flex-1 flex flex-col min-w-0 bg-neutral-darkest">
+          {/* Top bar inside dashboard */}
+          <div className="flex items-center justify-between px-6 py-5 border-b border-neutral-800 bg-neutral-dark/70 backdrop-blur-sm">
+            <div>
+              <div className="text-xs text-neutral-500 uppercase tracking-wide">
+                Dashboard
+              </div>
+              <div className="text-h3 font-semibold text-white leading-tight">
+                Your Workflows
+              </div>
+              <div className="text-neutral-500 text-xs">
+                Build, review, and deploy automations
+              </div>
+            </div>
+
+            <button
+              onClick={() => navigate("/workflow/new")}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary-yellow text-neutral-darkest font-semibold shadow-glow hover:shadow-glow-strong hover:bg-primary-yellow-hover transition-all text-sm"
+            >
+              <PlusCircle className="w-4 h-4" />
+              <span>Create New Workflow</span>
+            </button>
+          </div>
+
+          {/* Page content */}
+          <div className="flex-1 min-h-0 overflow-y-auto p-6">
+            {children}
+          </div>
+
+          {/* Footer */}
+          <footer className="border-t border-neutral-800 bg-neutral-dark px-6 py-6 text-center text-neutral-600 text-xs">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 flex-wrap">
+              <a
+                className="hover:text-primary-yellow transition-colors"
+                href="/privacy"
+              >
+                Privacy Policy
+              </a>
+              <a
+                className="hover:text-primary-yellow transition-colors"
+                href="/terms"
+              >
+                Terms of Service
+              </a>
+              <a
+                className="hover:text-primary-yellow transition-colors"
+                href="/cookie-policy"
+              >
+                Cookie Policy
+              </a>
+              <a
+                className="hover:text-primary-yellow transition-colors"
+                href="/gdpr"
+              >
+                GDPR / Data Protection
+              </a>
+            </div>
+            <div className="mt-4 text-neutral-500">
+              Built by El Houcine Idousaid
+            </div>
+          </footer>
+        </section>
+      </div>
+    </div>
+  );
+};
+
+export default DashboardLayout;
+
+What this gives you:
+
+
+Sidebar with nav (Workflows, Analytics, Settings, Legal).
+
+
+Top bar with "Create New Workflow" button.
+
+
+Footer with compliance links + “Built by El Houcine Idousaid”.
+
+
+Slot {children} so you can render WorkflowList inside.
+
+
+Now let’s build WorkflowList.tsx.
+
+WorkflowList.tsx
+This is the table of “everything the AI already generated for me”. In v1 we’ll mock data. Later you'll load it from the backend (/api/workflows).
+import React from "react";
+import { MoreHorizontal, Download, PlayCircle, ExternalLink } from "lucide-react";
+
+export type WorkflowStatus = "draft" | "active" | "error";
+
+export type WorkflowItem = {
+  id: string;
+  name: string;
+  description: string;
+  status: WorkflowStatus;
+  runsLast24h: number;
+  successRate: number; // 0-100
+  updatedAt: string; // ISO or nice string
+};
+
+type WorkflowListProps = {
+  workflows?: WorkflowItem[];
+  onOpen?: (id: string) => void;
+  onExport?: (id: string) => void;
+  onRunMonitor?: (id: string) => void;
+};
+
+const statusStyle: Record<WorkflowStatus, { label: string; className: string }> = {
+  draft: {
+    label: "Draft",
+    className:
+      "bg-neutral-800 text-neutral-300 border border-neutral-600",
+  },
+  active: {
+    label: "Active",
+    className:
+      "bg-semantic-success/20 text-semantic-success border border-semantic-success/40",
+  },
+  error: {
+    label: "Error",
+    className:
+      "bg-semantic-error/20 text-semantic-error border border-semantic-error/40",
+  },
+};
+
+const WorkflowList: React.FC<WorkflowListProps> = ({
+  workflows = [
+    {
+      id: "wf_001",
+      name: "Zendesk → AI Summary → Slack Alert",
+      description:
+        "Summarize every new Zendesk ticket with Gemini and send priority alerts to Slack.",
+      status: "active",
+      runsLast24h: 132,
+      successRate: 99.2,
+      updatedAt: "2025-10-27 14:32",
+    },
+    {
+      id: "wf_002",
+      name: "Daily Ops Report",
+      description:
+        "Pull yesterday’s stats, generate a management summary, email it at 07:00.",
+      status: "draft",
+      runsLast24h: 0,
+      successRate: 0,
+      updatedAt: "2025-10-26 09:10",
+    },
+    {
+      id: "wf_003",
+      name: "Escalation Monitor",
+      description:
+        "Detect VIP complaints and alert on-call lead instantly if sentiment is negative.",
+      status: "error",
+      runsLast24h: 12,
+      successRate: 75.0,
+      updatedAt: "2025-10-25 22:41",
+    },
+  ],
+  onOpen,
+  onExport,
+  onRunMonitor,
+}) => {
+  return (
+    <div className="w-full">
+      {/* Header row */}
+      <div className="flex items-end justify-between mb-6 flex-wrap gap-4">
+        <div>
+          <div className="text-h3 font-semibold text-white leading-tight">
+            Saved Workflows
+          </div>
+          <div className="text-neutral-500 text-sm">
+            Your generated automations. Review, export, monitor.
+          </div>
+        </div>
+
+        <div className="text-xs text-neutral-600">
+          Data stays on your side.  
+          We generate logic — you run it in your own n8n.
+        </div>
+      </div>
+
+      {/* Table container */}
+      <div className="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-dark shadow-card glass-card">
+        <table className="w-full text-left text-sm text-neutral-300">
+          <thead className="bg-neutral-dark/60 border-b border-neutral-800 text-xs uppercase tracking-wide text-neutral-500">
+            <tr>
+              <th className="px-5 py-4 font-medium">Workflow</th>
+              <th className="px-5 py-4 font-medium">Status</th>
+              <th className="px-5 py-4 font-medium whitespace-nowrap">
+                Runs (24h)
+              </th>
+              <th className="px-5 py-4 font-medium whitespace-nowrap">
+                Success
+              </th>
+              <th className="px-5 py-4 font-medium whitespace-nowrap">
+                Updated
+              </th>
+              <th className="px-5 py-4 font-medium text-right">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {workflows.map((wf, idx) => (
+              <tr
+                key={wf.id}
+                className={`border-b border-neutral-800/60 ${
+                  idx % 2 === 0 ? "bg-neutral-dark/40" : "bg-neutral-darkest/40"
+                }`}
+              >
+                {/* Name + description */}
+                <td className="align-top px-5 py-4">
+                  <div className="text-white font-medium flex items-center gap-2">
+                    <span>{wf.name}</span>
+                    {wf.status === "active" && (
+                      <span className="text-[10px] font-mono text-semantic-success bg-semantic-success/10 border border-semantic-success/40 rounded px-2 py-[2px] leading-none">
+                        LIVE
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-neutral-500 text-xs leading-relaxed mt-1 max-w-md">
+                    {wf.description}
+                  </div>
+                </td>
+
+                {/* Status */}
+                <td className="align-top px-5 py-4 whitespace-nowrap">
+                  <span
+                    className={`inline-flex items-center rounded-lg px-2 py-1 text-[11px] font-medium leading-none ${statusStyle[wf.status].className}`}
+                  >
+                    {statusStyle[wf.status].label}
+                  </span>
+                </td>
+
+                {/* Runs */}
+                <td className="align-top px-5 py-4 text-neutral-300 text-sm">
+                  {wf.runsLast24h}
+                </td>
+
+                {/* Success */}
+                <td className="align-top px-5 py-4 text-neutral-300 text-sm">
+                  {wf.successRate}%
+                </td>
+
+                {/* Updated */}
+                <td className="align-top px-5 py-4 text-neutral-500 text-xs whitespace-nowrap">
+                  {wf.updatedAt}
+                </td>
+
+                {/* Actions */}
+                <td className="align-top px-5 py-4 text-right">
+                  <div className="flex items-center justify-end gap-2 text-neutral-400">
+                    <button
+                      className="flex items-center gap-1 px-2 py-1.5 rounded-lg bg-neutral-800 border border-neutral-700 hover:border-primary-yellow/40 hover:text-primary-yellow transition-all text-[11px] font-medium"
+                      onClick={() => onOpen && onOpen(wf.id)}
+                      title="Open workflow"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Open</span>
+                    </button>
+
+                    <button
+                      className="flex items-center gap-1 px-2 py-1.5 rounded-lg bg-neutral-800 border border-neutral-700 hover:border-primary-yellow/40 hover:text-primary-yellow transition-all text-[11px] font-medium"
+                      onClick={() => onExport && onExport(wf.id)}
+                      title="Export to n8n"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>Export</span>
+                    </button>
+
+                    <button
+                      className="flex items-center gap-1 px-2 py-1.5 rounded-lg bg-neutral-800 border border-neutral-700 hover:border-primary-yellow/40 hover:text-primary-yellow transition-all text-[11px] font-medium"
+                      onClick={() => onRunMonitor && onRunMonitor(wf.id)}
+                      title="Run & Monitor"
+                    >
+                      <PlayCircle className="w-3.5 h-3.5" />
+                      <span>Monitor</span>
+                    </button>
+
+                    <button
+                      className="p-1.5 rounded-lg bg-neutral-800 border border-neutral-700 hover:border-neutral-500 transition-all"
+                      title="More"
+                    >
+                      <MoreHorizontal className="w-4 h-4 text-neutral-500 hover:text-neutral-300" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* small compliance note */}
+      <div className="text-[11px] text-neutral-500 mt-4 leading-relaxed max-w-2xl">
+        Workflows are generated with AI (Gemini 2.0 Flash).
+        Always review logic and credentials before running in production.
+        You control your own n8n instance — we never execute on your behalf.
+      </div>
+    </div>
+  );
+};
+
+export default WorkflowList;
+
+How it connects:
+
+
+DashboardLayout wraps the page (sidebar, header, footer).
+
+
+Inside DashboardLayout, you render <WorkflowList />.
+
+
+The “Create New Workflow” button in the header routes you to /workflow/new which is the ChatInterface screen we already built.
+
+
+Action buttons:
+
+
+Open → later can navigate to /workflow/:id
+
+
+Export → trigger download of that workflow JSON so user can import into n8n
+
+
+Monitor → later show analytics
+
+
+
+
+Yes: “workflow list” = “list of workflows the user already created with the AI”.
+You now have landing, dashboard shell, workflow list, create workflow chat, export guidance, compliance footer, and your name in-product. This is already a real SaaS direction, not a concept.
+========================
+FAQ
+===============================================
+frontend/
+└── src/
+    └── pages/
+        ├── PrivacyPolicy.tsx
+        ├── TermsOfService.tsx
+        ├── CookiePolicy.tsx
+        └── GDPRPage.tsx
+
+        In your router configuration (src/App.tsx or src/routes.tsx):
+
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import CookiePolicy from "./pages/CookiePolicy";
+import GDPRPage from "./pages/GDPRPage";
+
+<Route path="/privacy" element={<PrivacyPolicy />} />
+<Route path="/terms" element={<TermsOfService />} />
+<Route path="/cookie-policy" element={<CookiePolicy />} />
+<Route path="/gdpr" element={<GDPRPage />} />

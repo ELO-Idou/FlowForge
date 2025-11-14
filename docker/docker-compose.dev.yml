@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../docker/Dockerfile.frontend
+      target: dev
+    container_name: automation_frontend_dev
+    ports:
+      - "3000:5173"
+    volumes:
+      - ../frontend:/app
+    environment:
+      - VITE_API_URL=http://backend:8000
+
+  backend:
+    extends:
+      file: docker-compose.yml
+      service: backend
+    command: ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+    volumes:
+      - ../backend:/app

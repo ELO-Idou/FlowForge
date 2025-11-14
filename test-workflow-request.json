@@ -1,0 +1,9 @@
+{
+  "messages": [
+    {
+      "id": "1",
+      "role": "user",
+      "content": "Create a customer support automation workflow for Nuki smart locks. The workflow should:\n1. Start with a manual trigger for testing\n2. Mock a customer ticket with the text: 'My Nuki lock won't open after calibration, I hear clicking and the motor seems blocked.'\n3. Extract customer issue from ticket text using JavaScript code that analyzes keywords\n4. Categorize issues into: motor_blocked, battery_issue, door_not_opening, bluetooth_failure, bridge_offline\n5. Route to appropriate response based on category using a Switch node\n6. Provide detailed troubleshooting steps for each category\n\nInclude complete JavaScript code for issue extraction that checks keywords like 'motor blocked', 'clicking', 'battery', 'won't open', 'bluetooth', 'bridge offline' and returns an object with category, confidence, and keywords_found fields. Make the switch node route based on the category field."
+    }
+  ]
+}

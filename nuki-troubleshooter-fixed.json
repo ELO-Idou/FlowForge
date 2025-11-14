@@ -1,0 +1,265 @@
+{
+  "name": "Nuki Smart Lock Troubleshooter (Fixed)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-1",
+      "name": "When clicking 'Test workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "ticket_text",
+              "value": "My Nuki lock won't open after calibration, I hear clicking and the motor seems blocked."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-ticket",
+      "name": "Mock Customer Ticket",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract issue category from ticket text\nconst text = ($input.item.json.ticket_text || '').toLowerCase();\n\nconst categories = [\n  {name: 'motor_blocked', keywords: ['motor blocked', 'clicking', 'motor', 'block']},\n  {name: 'battery_issue', keywords: ['battery', 'low battery', 'weak battery']},\n  {name: 'bridge_offline', keywords: ['bridge offline', 'wifi', 'network', 'offline']},\n  {name: 'bluetooth_failure', keywords: ['bluetooth', 'pairing', 'connect bluetooth']},\n  {name: 'door_not_opening', keywords: [\"won't open\", 'cant open', 'cannot open', 'jammed', 'stuck door']}\n];\n\nlet detected = {category: 'unknown', keywords: []};\n\nfor (const cat of categories) {\n  for (const keyword of cat.keywords) {\n    if (text.includes(keyword)) {\n      detected.category = cat.name;\n      detected.keywords.push(keyword);\n    }\n  }\n  if (detected.category !== 'unknown') break;\n}\n\nconst confidence = Math.min(100, detected.keywords.length * 40) || 30;\n\nreturn {\n  ticket_text: $input.item.json.ticket_text,\n  category: detected.category,\n  confidence: confidence,\n  keywords_found: detected.keywords\n};"
+      },
+      "id": "ai-extract",
+      "name": "AI Issue Extraction",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": ""
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "motor_blocked",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Motor Blocked"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": ""
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "battery_issue",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Battery Issue"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": ""
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "door_not_opening",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Door Stuck"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "switch-route",
+      "name": "Route by Category",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "reply",
+              "value": "🛠️ Motor Blocked – Try these steps:\n\n1. Manually unlock, then re-lock the door\n2. Check latch alignment and lubricate if needed\n3. Run Calibration in the Nuki app\n4. Update firmware to latest version\n\nIf clicking persists, we'll arrange a replacement check."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "motor-reply",
+      "name": "Motor Blocked Reply",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [1120, 180]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "reply",
+              "value": "🔋 Battery Issue – Try these steps:\n\n1. Replace with quality alkaline batteries\n2. Run Battery Calibration in the Nuki app\n3. Update firmware to latest version\n\nIf issue persists, reply and we'll escalate to support."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "battery-reply",
+      "name": "Battery Issue Reply",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "reply",
+              "value": "🚪 Door Won't Open – Try these steps:\n\n1. Manually unlock to release tension\n2. Check door alignment and latch friction\n3. Run Calibration in the Nuki app\n\nIf still blocked, we'll escalate for human review."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "door-reply",
+      "name": "Door Stuck Reply",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [1120, 420]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "reply",
+              "value": "ℹ️ We couldn't auto-detect the issue.\n\nPlease provide:\n• Symptoms\n• App error messages\n• Firmware version\n\nAn agent will review your case."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "unknown-reply",
+      "name": "Unknown Issue Reply",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [1120, 540]
+    }
+  ],
+  "connections": {
+    "When clicking 'Test workflow'": {
+      "main": [
+        [
+          {
+            "node": "Mock Customer Ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mock Customer Ticket": {
+      "main": [
+        [
+          {
+            "node": "AI Issue Extraction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Issue Extraction": {
+      "main": [
+        [
+          {
+            "node": "Route by Category",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Category": {
+      "main": [
+        [
+          {
+            "node": "Motor Blocked Reply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Battery Issue Reply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Door Stuck Reply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Unknown Issue Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": []
+}
