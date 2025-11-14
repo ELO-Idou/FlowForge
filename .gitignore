@@ -4,6 +4,8 @@ dist/
 __pycache__/
 *.pyc
 backend/.env
+docker/secrets/*
+!docker/secrets/README.md
 *.sqlite
 .DS_Store
 .idea/

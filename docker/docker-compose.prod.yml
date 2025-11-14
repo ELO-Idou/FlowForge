@@ -15,3 +15,28 @@ services:
     environment:
       - ENVIRONMENT=production
       - DEBUG=false
+
+  postgres:
+    extends:
+      file: docker-compose.yml
+      service: postgres
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+    secrets:
+      - postgres_password
+
+  redis:
+    extends:
+      file: docker-compose.yml
+      service: redis
+    command: ["/bin/sh", "/start-redis.sh"]
+    volumes:
+      - ./start-redis.sh:/start-redis.sh:ro
+    secrets:
+      - redis_password
+
+secrets:
+  postgres_password:
+    file: ./secrets/postgres_password.txt
+  redis_password:
+    file: ./secrets/redis_password.txt
